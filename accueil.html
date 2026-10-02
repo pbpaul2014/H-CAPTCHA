@@ -85,8 +85,9 @@
 
             <!-- Grille dynamique -->
             <div id="linksGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
-                <!-- Raccourci Fixe/Permanent Horloge -->
-                <div class="group relative bg-slate-900/60 border border-indigo-500/30 hover:border-indigo-500 rounded-2xl p-4 flex flex-col items-center justify-center gap-3 transition-all duration-200 hover:-translate-y-1 hover:shadow-xl backdrop-blur-md">
+                
+                <!-- 1. Raccourci Fixe : Horloge -->
+                <div class="system-card group relative bg-slate-900/60 border border-indigo-500/30 hover:border-indigo-500 rounded-2xl p-4 flex flex-col items-center justify-center gap-3 transition-all duration-200 hover:-translate-y-1 hover:shadow-xl backdrop-blur-md">
                     <a href="horloge.html" class="flex flex-col items-center gap-3 w-full h-full">
                         <div class="w-12 h-12 rounded-xl bg-indigo-500/10 border border-indigo-500/30 flex items-center justify-center p-2.5 text-indigo-400 group-hover:scale-110 transition-transform">
                             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -100,7 +101,37 @@
                     </span>
                 </div>
 
-                <!-- Les cartes de liens utilisateur seront insérées ici par JS -->
+                <!-- 2. Raccourci Fixe : Météo -->
+                <div class="system-card group relative bg-slate-900/60 border border-indigo-500/30 hover:border-indigo-500 rounded-2xl p-4 flex flex-col items-center justify-center gap-3 transition-all duration-200 hover:-translate-y-1 hover:shadow-xl backdrop-blur-md">
+                    <a href="meteo.html" class="flex flex-col items-center gap-3 w-full h-full">
+                        <div class="w-12 h-12 rounded-xl bg-indigo-500/10 border border-indigo-500/30 flex items-center justify-center p-2.5 text-indigo-400 group-hover:scale-110 transition-transform">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 00-9.78 2.096A4.001 4.001 0 003 15z"></path>
+                            </svg>
+                        </div>
+                        <span class="text-sm font-medium text-slate-200 group-hover:text-white truncate max-w-full">Météo</span>
+                    </a>
+                    <span class="absolute top-2 right-2 px-1.5 py-0.5 text-[10px] font-semibold text-indigo-400 bg-indigo-500/10 border border-indigo-500/20 rounded">
+                        Système
+                    </span>
+                </div>
+
+                <!-- 3. Raccourci Fixe : Bruits de fond -->
+                <div class="system-card group relative bg-slate-900/60 border border-indigo-500/30 hover:border-indigo-500 rounded-2xl p-4 flex flex-col items-center justify-center gap-3 transition-all duration-200 hover:-translate-y-1 hover:shadow-xl backdrop-blur-md">
+                    <a href="relax.html" class="flex flex-col items-center gap-3 w-full h-full">
+                        <div class="w-12 h-12 rounded-xl bg-indigo-500/10 border border-indigo-500/30 flex items-center justify-center p-2.5 text-indigo-400 group-hover:scale-110 transition-transform">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 .895-2 3-2 3 .895 3 2zm12 0c0 1.105-1.343 2-3 2s-3-.895-3-2 .895-2 3-2 3 .895 3 2zM9 10l12-3"></path>
+                            </svg>
+                        </div>
+                        <span class="text-sm font-medium text-slate-200 group-hover:text-white truncate max-w-full">Relaxation</span>
+                    </a>
+                    <span class="absolute top-2 right-2 px-1.5 py-0.5 text-[10px] font-semibold text-indigo-400 bg-indigo-500/10 border border-indigo-500/20 rounded">
+                        Système
+                    </span>
+                </div>
+
+                <!-- Les cartes personnalisées utilisateur seront insérées ici par JS -->
             </div>
         </div>
 
@@ -178,11 +209,12 @@
             const links = getLinks();
             const grid = document.getElementById('linksGrid');
             
-            // Conserve la carte permanente vers horloge.html (le premier enfant HTML)
-            const permanentCard = grid.firstElementChild;
+            // Conserve les cartes système permanentes
+            const systemCards = Array.from(grid.querySelectorAll('.system-card'));
             grid.innerHTML = '';
-            grid.appendChild(permanentCard);
+            systemCards.forEach(card => grid.appendChild(card));
 
+            // Ajoute les liens personnalisés
             links.forEach(link => {
                 let faviconUrl = '';
                 try {
