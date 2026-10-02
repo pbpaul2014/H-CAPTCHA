@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Météo</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @keyframes pulse-subtle {
+            0%, 100% { opacity: 0.25; transform: scale(1); }
+            50% { opacity: 0.55; transform: scale(1.08); }
+        }
+        .animate-pulse-glow { animation: pulse-subtle 7s ease-in-out infinite; }
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col justify-between p-6 relative overflow-x-hidden font-sans select-none">
+
+    <!-- Arrière-plan décoratif -->
+    <div class="absolute -top-40 -left-40 w-[30rem] h-[30rem] bg-indigo-600/20 rounded-full blur-3xl pointer-events-none animate-pulse-glow"></div>
+    <div class="absolute -bottom-40 -right-40 w-[30rem] h-[30rem] bg-emerald-600/20 rounded-full blur-3xl pointer-events-none animate-pulse-glow" style="animation-delay: 3.5s;"></div>
+
+    <!-- Barre de contrôle supérieure -->
+    <header class="relative z-10 w-full max-w-6xl mx-auto flex items-center justify-between py-2">
+        <a href="accueil.html" class="flex items-center gap-2 px-4 py-2 bg-slate-900/80 border border-slate-800 hover:border-slate-700 rounded-xl text-slate-300 hover:text-white backdrop-blur-md transition-all">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+            </svg>
+            <span class="text-sm font-medium">Accueil</span>
+        </a>
+
+        <button onclick="toggleFullscreen()" class="flex items-center gap-2 px-4 py-2 bg-slate-900/80 border border-slate-800 hover:border-slate-700 rounded-xl text-slate-300 hover:text-white backdrop-blur-md transition-all cursor-pointer">
+            <svg id="fullscreenIcon" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-5h-4m4 0v4m0-4l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"></path>
+            </svg>
+            <span id="fullscreenText" class="text-sm font-medium">Plein écran</span>
+        </button>
+    </header>
+
+    <!-- Contenu Météo -->
+    <main class="relative z-10 my-auto w-full max-w-2xl mx-auto flex flex-col items-center">
+        
+        <!-- Barre de recherche de ville -->
+        <form id="searchForm" class="w-full mb-8">
+            <div class="relative flex items-center">
+                <input type="text" id="cityInput" placeholder="Rechercher une ville (ex: Paris, Tokyo)..." 
+                       class="w-full py-3.5 pl-12 pr-12 bg-slate-900/90 border border-slate-800 focus:border-indigo-500 rounded-2xl text-white placeholder-slate-500 shadow-xl backdrop-blur-xl focus:outline-none focus:ring-2 focus:ring-indigo-500/20 transition-all">
+                <svg class="w-5 h-5 text-slate-500 absolute left-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                </svg>
+                <button type="submit" class="absolute right-2.5 p-2 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl transition">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+                    </svg>
+                </button>
+            </div>
+        </form>
+
+        <!-- Carte Principale Météo -->
+        <div class="w-full bg-slate-900/80 border border-slate-800 rounded-3xl p-8 backdrop-blur-xl shadow-2xl text-center">
+            <div id="loading" class="text-slate-400 py-8">Chargement de la météo...</div>
+            
+            <div id="weatherData" class="hidden">
+                <div class="flex items-center justify-center gap-2 mb-2">
+                    <svg class="w-6 h-6 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                    </svg>
+                    <h1 id="cityName" class="text-3xl font-bold text-white">---</h1>
+                </div>
+                
+                <p id="weatherDesc" class="text-indigo-400 font-medium capitalize mb-6">---</p>
+
+                <div class="text-7xl font-extrabold text-white mb-6 tracking-tight" id="temp">--°C</div>
+
+                <!-- Indicateurs clés -->
+                <div class="grid grid-cols-2 gap-4 max-w-sm mx-auto mb-8">
+                    <div class="bg-slate-950/60 border border-slate-800 rounded-2xl p-4 flex flex-col items-center">
+                        <span class="text-xs text-slate-400 mb-1">Humidité</span>
+                        <span id="humidity" class="text-lg font-bold text-white">--%</span>
+                    </div>
+                    <div class="bg-slate-950/60 border border-slate-800 rounded-2xl p-4 flex flex-col items-center">
+                        <span class="text-xs text-slate-400 mb-1">Vent</span>
+                        <span id="wind" class="text-lg font-bold text-white">-- km/h</span>
+                    </div>
+                </div>
+
+                <!-- Prévisions sur 5 jours -->
+                <div class="border-t border-slate-800/80 pt-6">
+                    <h3 class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-4 text-left">Prévisions 5 jours</h3>
+                    <div id="forecastGrid" class="grid grid-cols-5 gap-2"></div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="relative z-10 w-full max-w-6xl mx-auto text-center py-2 text-xs text-slate-600">
+        Données fournies en temps réel via Open-Meteo
+    </footer>
+
+    <script>
+        const weatherCodes = {
+            0: "Ciel dégagé", 1: "Principalement dégagé", 2: "Partiellement nuageux", 3: "Couvert",
+            45: "Brouillard", 48: "Brouillard givrant", 51: "Bruine légère", 53: "Bruine modérée",
+            61: "Pluie légère", 63: "Pluie modérée", 65: "Pluie forte", 71: "Neige légère",
+            73: "Neige modérée", 75: "Neige forte", 80: "Averses de pluie", 95: "Orage"
+        };
+
+        async function fetchWeatherByCoords(lat, lon, name = "Ma Position") {
+            try {
+                document.getElementById('loading').classList.remove('hidden');
+                document.getElementById('weatherData').classList.add('hidden');
+
+                const res = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true&hourly=relativehumidity_2m&daily=temperature_2m_max,temperature_2m_min,weathercode&timezone=auto`);
+                const data = await res.json();
+
+                document.getElementById('cityName').textContent = name;
+                document.getElementById('temp').textContent = `${Math.round(data.current_weather.temperature)}°C`;
+                document.getElementById('weatherDesc').textContent = weatherCodes[data.current_weather.weathercode] || "Variable";
+                document.getElementById('humidity').textContent = `${data.hourly.relativehumidity_2m[0]}%`;
+                document.getElementById('wind').textContent = `${Math.round(data.current_weather.windspeed)} km/h`;
+
+                // Prévisions
+                const forecastGrid = document.getElementById('forecastGrid');
+                forecastGrid.innerHTML = '';
+                for (let i = 0; i < 5; i++) {
+                    const date = new Date(data.daily.time[i]);
+                    const dayName = date.toLocaleDateString('fr-FR', { weekday: 'short' });
+                    const max = Math.round(data.daily.temperature_2m_max[i]);
+                    const min = Math.round(data.daily.temperature_2m_min[i]);
+
+                    const card = document.createElement('div');
+                    card.className = "bg-slate-950/40 border border-slate-800/60 rounded-xl p-2 flex flex-col items-center text-xs";
+                    card.innerHTML = `
+                        <span class="text-slate-400 capitalize font-medium mb-1">${dayName}</span>
+                        <span class="font-bold text-white">${max}°</span>
+                        <span class="text-slate-500">${min}°</span>
+                    `;
+                    forecastGrid.appendChild(card);
+                }
+
+                document.getElementById('loading').classList.add('hidden');
+                document.getElementById('weatherData').classList.remove('hidden');
+            } catch (err) {
+                alert("Erreur lors de la récupération de la météo.");
+            }
+        }
+
+        async function searchCity(city) {
+            try {
+                const res = await fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(city)}&count=1&language=fr&format=json`);
+                const data = await res.json();
+                if (data.results && data.results.length > 0) {
+                    const place = data.results[0];
+                    fetchWeatherByCoords(place.latitude, place.longitude, place.name);
+                } else {
+                    alert("Ville introuvable.");
+                }
+            } catch (err) {
+                alert("Erreur de recherche.");
+            }
+        }
+
+        document.getElementById('searchForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const city = document.getElementById('cityInput').value.trim();
+            if (city) searchCity(city);
+        });
+
+        // Géolocalisation par défaut (ou Paris si refusé)
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+                pos => fetchWeatherByCoords(pos.coords.latitude, pos.coords.longitude, "Ma Position"),
+                () => fetchWeatherByCoords(48.8566, 2.3522, "Paris")
+            );
+        } else {
+            fetchWeatherByCoords(48.8566, 2.3522, "Paris");
+        }
+
+        function toggleFullscreen() {
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen();
+            } else {
+                document.exitFullscreen();
+            }
+        }
+    </script>
+</body>
+</html>
