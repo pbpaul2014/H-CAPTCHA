@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bruits de Fond & Relaxation</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @keyframes pulse-subtle {
+            0%, 100% { opacity: 0.25; transform: scale(1); }
+            50% { opacity: 0.55; transform: scale(1.08); }
+        }
+        .animate-pulse-glow { animation: pulse-subtle 7s ease-in-out infinite; }
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col justify-between p-6 relative overflow-x-hidden font-sans select-none">
+
+    <!-- Arrière-plan décoratif -->
+    <div class="absolute -top-40 -left-40 w-[30rem] h-[30rem] bg-indigo-600/20 rounded-full blur-3xl pointer-events-none animate-pulse-glow"></div>
+    <div class="absolute -bottom-40 -right-40 w-[30rem] h-[30rem] bg-emerald-600/20 rounded-full blur-3xl pointer-events-none animate-pulse-glow" style="animation-delay: 3.5s;"></div>
+
+    <!-- Barre de contrôle supérieure -->
+    <header class="relative z-10 w-full max-w-6xl mx-auto flex items-center justify-between py-2">
+        <a href="accueil.html" class="flex items-center gap-2 px-4 py-2 bg-slate-900/80 border border-slate-800 hover:border-slate-700 rounded-xl text-slate-300 hover:text-white backdrop-blur-md transition-all">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+            </svg>
+            <span class="text-sm font-medium">Accueil</span>
+        </a>
+
+        <button onclick="toggleFullscreen()" class="flex items-center gap-2 px-4 py-2 bg-slate-900/80 border border-slate-800 hover:border-slate-700 rounded-xl text-slate-300 hover:text-white backdrop-blur-md transition-all cursor-pointer">
+            <svg id="fullscreenIcon" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-5h-4m4 0v4m0-4l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"></path>
+            </svg>
+            <span id="fullscreenText" class="text-sm font-medium">Plein écran</span>
+        </button>
+    </header>
+
+    <!-- Contenu Relaxation -->
+    <main class="relative z-10 my-auto w-full max-w-4xl mx-auto flex flex-col items-center">
+        <div class="text-center mb-8">
+            <h1 class="text-4xl font-extrabold text-white tracking-tight mb-2">Ambiance & Relaxation</h1>
+            <p class="text-slate-400 text-sm">Mixez vos bruits de fond préférés pour la concentration ou le sommeil.</p>
+        </div>
+
+        <!-- Grille des sons -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 w-full mb-8">
+            
+            <!-- Pluie -->
+            <div class="bg-slate-900/80 border border-slate-800 rounded-2xl p-6 backdrop-blur-xl flex flex-col gap-4">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 bg-indigo-500/10 border border-indigo-500/20 rounded-xl flex items-center justify-center text-indigo-400">
+                            🌧️
+                        </div>
+                        <span class="font-semibold text-white">Pluie apaisante</span>
+                    </div>
+                    <button onclick="toggleSound('rain')" id="btn-rain" class="px-4 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-medium text-slate-300 transition">OFF</button>
+                </div>
+                <input type="range" id="vol-rain" min="0" max="1" step="0.01" value="0.5" oninput="setVolume('rain', this.value)" class="w-full accent-indigo-500 bg-slate-950">
+            </div>
+
+            <!-- Feu de bois -->
+            <div class="bg-slate-900/80 border border-slate-800 rounded-2xl p-6 backdrop-blur-xl flex flex-col gap-4">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 bg-amber-500/10 border border-amber-500/20 rounded-xl flex items-center justify-center text-amber-400">
+                            🔥
+                        </div>
+                        <span class="font-semibold text-white">Feu de cheminée</span>
+                    </div>
+                    <button onclick="toggleSound('fire')" id="btn-fire" class="px-4 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-medium text-slate-300 transition">OFF</button>
+                </div>
+                <input type="range" id="vol-fire" min="0" max="1" step="0.01" value="0.5" oninput="setVolume('fire', this.value)" class="w-full accent-amber-500 bg-slate-950">
+            </div>
+
+            <!-- Vagues / Bruit Blanc -->
+            <div class="bg-slate-900/80 border border-slate-800 rounded-2xl p-6 backdrop-blur-xl flex flex-col gap-4">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 bg-cyan-500/10 border border-cyan-500/20 rounded-xl flex items-center justify-center text-cyan-400">
+                            🌊
+                        </div>
+                        <span class="font-semibold text-white">Bruit Blanc / Vagues</span>
+                    </div>
+                    <button onclick="toggleSound('waves')" id="btn-waves" class="px-4 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-medium text-slate-300 transition">OFF</button>
+                </div>
+                <input type="range" id="vol-waves" min="0" max="1" step="0.01" value="0.5" oninput="setVolume('waves', this.value)" class="w-full accent-cyan-500 bg-slate-950">
+            </div>
+
+            <!-- Ondes Zénith / Lo-Fi synth -->
+            <div class="bg-slate-900/80 border border-slate-800 rounded-2xl p-6 backdrop-blur-xl flex flex-col gap-4">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 bg-emerald-500/10 border border-emerald-500/20 rounded-xl flex items-center justify-center text-emerald-400">
+                            🧘🏻‍♂️
+                        </div>
+                        <span class="font-semibold text-white">Ondes Zen</span>
+                    </div>
+                    <button onclick="toggleSound('zen')" id="btn-zen" class="px-4 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-medium text-slate-300 transition">OFF</button>
+                </div>
+                <input type="range" id="vol-zen" min="0" max="1" step="0.01" value="0.5" oninput="setVolume('zen', this.value)" class="w-full accent-emerald-500 bg-slate-950">
+            </div>
+
+        </div>
+
+        <!-- Stop Tout -->
+        <button onclick="stopAll()" class="px-6 py-3 bg-rose-600/20 border border-rose-500/30 text-rose-300 hover:bg-rose-600 hover:text-white rounded-xl text-sm font-medium transition backdrop-blur-md">
+            Tout arrêter
+        </button>
+    </main>
+
+    <footer class="relative z-10 w-full max-w-6xl mx-auto text-center py-2 text-xs text-slate-600">
+        Génération audio en direct sans fichier externe
+    </footer>
+
+    <script>
+        let audioCtx = null;
+        const sounds = { rain: null, fire: null, waves: null, zen: null };
+
+        function initAudio() {
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+        }
+
+        function createNoiseBuffer() {
+            const bufferSize = audioCtx.sampleRate * 2;
+            const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+            const output = buffer.getChannelData(0);
+            for (let i = 0; i < bufferSize; i++) {
+                output[i] = Math.random() * 2 - 1;
+            }
+            return buffer;
+        }
+
+        function toggleSound(type) {
+            initAudio();
+            if (sounds[type]) {
+                sounds[type].gain.gain.setValueAtTime(0, audioCtx.currentTime);
+                sounds[type] = null;
+                updateBtn(type, false);
+            } else {
+                startSound(type);
+                updateBtn(type, true);
+            }
+        }
+
+        function startSound(type) {
+            const gain = audioCtx.createGain();
+            const vol = parseFloat(document.getElementById(`vol-${type}`).value);
+            gain.gain.setValueAtTime(vol, audioCtx.currentTime);
+            gain.connect(audioCtx.destination);
+
+            if (type === 'rain' || type === 'waves') {
+                const whiteNoise = audioCtx.createBufferSource();
+                whiteNoise.buffer = createNoiseBuffer();
+                whiteNoise.loop = true;
+
+                const filter = audioCtx.createBiquadFilter();
+                filter.type = type === 'rain' ? 'lowpass' : 'bandpass';
+                filter.frequency.value = type === 'rain' ? 800 : 400;
+
+                whiteNoise.connect(filter);
+                filter.connect(gain);
+                whiteNoise.start();
+                sounds[type] = { source: whiteNoise, gain };
+            } else if (type === 'fire') {
+                const noise = audioCtx.createBufferSource();
+                noise.buffer = createNoiseBuffer();
+                noise.loop = true;
+
+                const filter = audioCtx.createBiquadFilter();
+                filter.type = 'bandpass';
+                filter.frequency.value = 1200;
+
+                noise.connect(filter);
+                filter.connect(gain);
+                noise.start();
+                sounds[type] = { source: noise, gain };
+            } else if (type === 'zen') {
+                const osc = audioCtx.createOscillator();
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(136.1, audioCtx.currentTime); // Fréquence Om
+                osc.connect(gain);
+                osc.start();
+                sounds[type] = { source: osc, gain };
+            }
+        }
+
+        function setVolume(type, val) {
+            if (sounds[type]) {
+                sounds[type].gain.gain.setValueAtTime(parseFloat(val), audioCtx.currentTime);
+            }
+        }
+
+        function updateBtn(type, active) {
+            const btn = document.getElementById(`btn-${type}`);
+            if (active) {
+                btn.textContent = "ON";
+                btn.className = "px-4 py-1.5 rounded-xl bg-emerald-600 text-xs font-medium text-white shadow-lg transition";
+            } else {
+                btn.textContent = "OFF";
+                btn.className = "px-4 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-medium text-slate-300 transition";
+            }
+        }
+
+        function stopAll() {
+            Object.keys(sounds).forEach(type => {
+                if (sounds[type]) toggleSound(type);
+            });
+        }
+
+        function toggleFullscreen() {
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen();
+            } else {
+                document.exitFullscreen();
+            }
+        }
+    </script>
+</body>
+</html>
