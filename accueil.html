@@ -85,7 +85,22 @@
 
             <!-- Grille dynamique -->
             <div id="linksGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
-                <!-- Les cartes de liens seront ajoutées ici par JavaScript -->
+                <!-- Raccourci Fixe/Permanent Horloge -->
+                <div class="group relative bg-slate-900/60 border border-indigo-500/30 hover:border-indigo-500 rounded-2xl p-4 flex flex-col items-center justify-center gap-3 transition-all duration-200 hover:-translate-y-1 hover:shadow-xl backdrop-blur-md">
+                    <a href="horloge.html" class="flex flex-col items-center gap-3 w-full h-full">
+                        <div class="w-12 h-12 rounded-xl bg-indigo-500/10 border border-indigo-500/30 flex items-center justify-center p-2.5 text-indigo-400 group-hover:scale-110 transition-transform">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                        </div>
+                        <span class="text-sm font-medium text-slate-200 group-hover:text-white truncate max-w-full">Horloge</span>
+                    </a>
+                    <span class="absolute top-2 right-2 px-1.5 py-0.5 text-[10px] font-semibold text-indigo-400 bg-indigo-500/10 border border-indigo-500/20 rounded">
+                        Système
+                    </span>
+                </div>
+
+                <!-- Les cartes de liens utilisateur seront insérées ici par JS -->
             </div>
         </div>
 
@@ -125,7 +140,7 @@
         </div>
     </div>
 
-    <!-- Script JavaScript pour l'interaction -->
+    <!-- Script JavaScript -->
     <script>
         // --- 1. Gestion de l'horloge ---
         function updateClock() {
@@ -141,15 +156,13 @@
         setInterval(updateClock, 1000);
         updateClock();
 
-        // --- 2. Liens par défaut ---
+        // --- 2. Liens personnalisables ---
         const defaultLinks = [
             { id: 1, title: 'Google', url: 'https://google.com' },
             { id: 2, title: 'YouTube', url: 'https://youtube.com' },
-            { id: 3, title: 'GitHub', url: 'https://github.com' },
-            { id: 4, title: 'Wikipedia', url: 'https://wikipedia.org' }
+            { id: 3, title: 'GitHub', url: 'https://github.com' }
         ];
 
-        // Charger ou initialiser les liens dans le localStorage
         function getLinks() {
             const stored = localStorage.getItem('launcher_links');
             return stored ? JSON.parse(stored) : defaultLinks;
@@ -164,12 +177,20 @@
         function renderLinks() {
             const links = getLinks();
             const grid = document.getElementById('linksGrid');
+            
+            // Conserve la carte permanente vers horloge.html (le premier enfant HTML)
+            const permanentCard = grid.firstElementChild;
             grid.innerHTML = '';
+            grid.appendChild(permanentCard);
 
             links.forEach(link => {
-                // Extrait le domaine pour obtenir la Favicon via Google Favicons
-                const domain = new URL(link.url).hostname;
-                const faviconUrl = `https://www.google.com/s2/favicons?domain=${domain}&sz=64`;
+                let faviconUrl = '';
+                try {
+                    const domain = new URL(link.url).hostname;
+                    faviconUrl = `https://www.google.com/s2/favicons?domain=${domain}&sz=64`;
+                } catch(e) {
+                    faviconUrl = 'https://via.placeholder.com/32';
+                }
 
                 const card = document.createElement('div');
                 card.className = "group relative bg-slate-900/60 border border-slate-800 hover:border-slate-700 rounded-2xl p-4 flex flex-col items-center justify-center gap-3 transition-all duration-200 hover:-translate-y-1 hover:shadow-xl backdrop-blur-md";
@@ -211,12 +232,11 @@
             links.push({ id: Date.now(), title, url });
             saveLinks(links);
 
-            // Réinitialiser et fermer le modal
             document.getElementById('addLinkForm').reset();
             closeModal();
         });
 
-        // --- 5. Fonctions du Modal ---
+        // --- 5. Fonctions Modal ---
         function openModal() {
             document.getElementById('addModal').classList.remove('hidden');
         }
@@ -225,7 +245,7 @@
             document.getElementById('addModal').classList.add('hidden');
         }
 
-        // Initialisation au chargement de la page
+        // Initialisation
         renderLinks();
     </script>
 </body>
