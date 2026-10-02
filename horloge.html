@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Horloge</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @keyframes pulse-subtle {
+            0%, 100% { opacity: 0.25; transform: scale(1); }
+            50% { opacity: 0.55; transform: scale(1.08); }
+        }
+        .animate-pulse-glow {
+            animation: pulse-subtle 7s ease-in-out infinite;
+        }
+        /* Masque automatiquement la barre de boutons après inactivé si souhaité */
+        .controls-bar {
+            transition: opacity 0.3s ease-in-out;
+        }
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col justify-between p-6 relative overflow-hidden font-sans select-none">
+
+    <!-- Arrière-plan décoratif animé -->
+    <div class="absolute -top-40 -left-40 w-[30rem] h-[30rem] bg-indigo-600/20 rounded-full blur-3xl pointer-events-none animate-pulse-glow"></div>
+    <div class="absolute -bottom-40 -right-40 w-[30rem] h-[30rem] bg-emerald-600/20 rounded-full blur-3xl pointer-events-none animate-pulse-glow" style="animation-delay: 3.5s;"></div>
+
+    <!-- Barre de contrôle supérieure -->
+    <header class="controls-bar relative z-10 w-full max-w-6xl mx-auto flex items-center justify-between py-2">
+        <!-- Bouton Retour -->
+        <a href="accueil.html" class="flex items-center gap-2 px-4 py-2 bg-slate-900/80 border border-slate-800 hover:border-slate-700 rounded-xl text-slate-300 hover:text-white backdrop-blur-md transition-all">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+            </svg>
+            <span class="text-sm font-medium">Accueil</span>
+        </a>
+
+        <!-- Bouton Plein Écran -->
+        <button id="fullscreenBtn" onclick="toggleFullscreen()" class="flex items-center gap-2 px-4 py-2 bg-slate-900/80 border border-slate-800 hover:border-slate-700 rounded-xl text-slate-300 hover:text-white backdrop-blur-md transition-all cursor-pointer">
+            <svg id="fullscreenIcon" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-5h-4m4 0v4m0-4l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"></path>
+            </svg>
+            <span id="fullscreenText" class="text-sm font-medium">Plein écran</span>
+        </button>
+    </header>
+
+    <!-- Affichage central de l'Horloge -->
+    <main class="relative z-10 my-auto flex flex-col items-center justify-center text-center px-4">
+        
+        <!-- Heure Digitale (Heures : Minutes : Secondes) -->
+        <div class="flex items-baseline justify-center tracking-tight font-extrabold text-white">
+            <span id="time" class="text-7xl sm:text-9xl md:text-[12rem] leading-none drop-shadow-2xl">00:00</span>
+            <span id="seconds" class="text-3xl sm:text-5xl md:text-7xl text-indigo-400 font-bold ml-2 sm:ml-4 tracking-normal">00</span>
+        </div>
+
+        <!-- Date complète -->
+        <p id="fullDate" class="mt-6 sm:mt-10 text-lg sm:text-2xl md:text-3xl text-slate-400 font-medium capitalize tracking-wide"></p>
+    </main>
+
+    <!-- Pied de page discret -->
+    <footer class="controls-bar relative z-10 w-full max-w-6xl mx-auto text-center py-2 text-xs text-slate-600">
+        Horloge numérique — Appuyez sur F11 ou le bouton pour basculer en plein écran
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+        // --- 1. Horloge et Date ---
+        function updateClock() {
+            const now = new Date();
+            
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const seconds = String(now.getSeconds()).padStart(2, '0');
+
+            document.getElementById('time').textContent = `${hours}:${minutes}`;
+            document.getElementById('seconds').textContent = seconds;
+
+            const options = { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' };
+            document.getElementById('fullDate').textContent = now.toLocaleDateString('fr-FR', options);
+        }
+
+        setInterval(updateClock, 1000);
+        updateClock();
+
+        // --- 2. Mode Plein Écran (Fullscreen) ---
+        function toggleFullscreen() {
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen().catch(err => {
+                    console.log(`Erreur plein écran: ${err.message}`);
+                });
+            } else {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                }
+            }
+        }
+
+        // Mettre à jour le bouton et l'icône selon le statut du plein écran
+        document.addEventListener('fullscreenchange', () => {
+            const fullscreenText = document.getElementById('fullscreenText');
+            const fullscreenIcon = document.getElementById('fullscreenIcon');
+
+            if (document.fullscreenElement) {
+                fullscreenText.textContent = "Quitter le plein écran";
+                // Icône réduire
+                fullscreenIcon.innerHTML = `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 9L4 4m0 0l5 0m-5 0l0 5m11 4l5 5m0 0l-5 0m5 0l0-5m-5-11l5 5m0 0l-5 0m5 0l0-5M9 15l-5 5m0 0l5 0m-5 0l0-5"></path>`;
+            } else {
+                fullscreenText.textContent = "Plein écran";
+                // Icône agrandir
+                fullscreenIcon.innerHTML = `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-5h-4m4 0v4m0-4l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"></path>`;
+            }
+        });
+    </script>
+</body>
+</html>
