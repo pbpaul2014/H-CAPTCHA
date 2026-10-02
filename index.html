@@ -1,183 +1,108 @@
 <!DOCTYPE html>
-<html lang="fr" class="h-full">
+<html lang="fr">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Vérification de sécurité</title>
-    <!-- Tailwind CSS CDN -->
+    <!-- Tailwind CSS pour un style moderne et responsive -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Google Fonts: Inter -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <!-- Lucide Icons -->
-    <script src="https://unpkg.com/lucide@latest"></script>
-    <!-- hCaptcha SDK -->
     <script src="https://js.hcaptcha.com/1/api.js" async defer></script>
-    
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
-                    }
-                }
-            }
-        }
-    </script>
-    
     <style>
-        .glass-card {
-            background: rgba(255, 255, 255, 0.88);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.7);
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.08), 0 0 20px rgba(0, 0, 0, 0.03);
+        @keyframes pulse-subtle {
+            0%, 100% { opacity: 0.4; transform: scale(1); }
+            50% { opacity: 0.7; transform: scale(1.05); }
         }
-
-        .pulse-bg {
-            animation: pulseGlow 10s ease-in-out infinite alternate;
-        }
-
-        @keyframes pulseGlow {
-            0% { transform: scale(1) translate(0, 0); opacity: 0.5; }
-            50% { transform: scale(1.1) translate(15px, -15px); opacity: 0.7; }
-            100% { transform: scale(1) translate(-15px, 15px); opacity: 0.5; }
+        .animate-pulse-glow {
+            animation: pulse-subtle 4s ease-in-out infinite;
         }
     </style>
 </head>
-<body class="h-full font-sans antialiased bg-slate-100 text-slate-800 flex flex-col justify-between relative overflow-x-hidden selection:bg-blue-500 selection:text-white">
+<body class="bg-slate-950 text-slate-100 min-h-screen flex items-center justify-center p-4 relative overflow-hidden font-sans">
 
-    <div class="fixed inset-0 pointer-events-none overflow-hidden z-0">
-        <div class="absolute -top-32 -left-32 w-96 h-96 bg-blue-400/20 rounded-full blur-3xl pulse-bg"></div>
-        <div class="absolute top-1/2 -right-20 w-80 h-80 bg-indigo-400/20 rounded-full blur-3xl pulse-bg" style="animation-delay: -4s;"></div>
-        <div class="absolute -bottom-20 left-1/3 w-96 h-96 bg-sky-300/20 rounded-full blur-3xl pulse-bg" style="animation-delay: -7s;"></div>
-    </div>
+    <!-- Arrière-plan décoratif avec dégradés flous -->
+    <div class="absolute -top-40 -left-40 w-96 h-96 bg-indigo-600/30 rounded-full blur-3xl pointer-events-none animate-pulse-glow"></div>
+    <div class="absolute -bottom-40 -right-40 w-96 h-96 bg-emerald-600/20 rounded-full blur-3xl pointer-events-none animate-pulse-glow" style="animation-delay: 2s;"></div>
 
-    <header class="relative z-10 w-full max-w-5xl mx-auto px-6 py-6 flex justify-between items-center">
-        <div class="flex items-center gap-2.5">
-            <div class="w-9 h-9 rounded-xl bg-blue-600 flex items-center justify-center text-white shadow-md shadow-blue-500/20">
-                <i data-lucide="shield-check" class="w-5 h-5"></i>
-            </div>
-            <span class="font-bold text-lg tracking-tight text-slate-900">AegisGuard</span>
+    <!-- Carte principale -->
+    <main class="relative z-10 w-full max-w-md bg-slate-900/80 backdrop-blur-xl border border-slate-800 rounded-2xl shadow-2xl p-8 text-center transition-all">
+        
+        <!-- Icône de sécurité -->
+        <div class="mx-auto mb-6 w-16 h-16 bg-emerald-500/10 border border-emerald-500/20 rounded-2xl flex items-center justify-center text-emerald-400 shadow-inner">
+            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+            </svg>
         </div>
-        <div class="flex items-center gap-2">
-            <span class="text-xs font-semibold px-3 py-1 rounded-full bg-blue-50 text-blue-700 border border-blue-200/60 flex items-center gap-1.5">
-                <span class="w-1.5 h-1.5 rounded-full bg-blue-600 animate-ping"></span>
-                Contrôle d'accès
-            </span>
-        </div>
-    </header>
 
-    <main class="relative z-10 flex-grow flex items-center justify-center p-4 sm:p-6">
-        <div class="w-full max-w-md glass-card rounded-3xl p-8 sm:p-10 transition-all duration-300">
+        <!-- Titre et sous-titre -->
+        <h1 class="text-2xl font-bold text-white tracking-tight mb-2">Vérification de sécurité</h1>
+        <p class="text-slate-400 text-sm mb-6 leading-relaxed">
+            Veuillez cocher la case ci-dessous pour confirmer que vous n'êtes pas un robot et accéder au site.
+        </p>
+
+        <!-- Formulaire de vérification hCaptcha -->
+        <form action="accueil.html" method="POST" id="captchaForm" class="flex flex-col items-center">
             
-            <!-- Icon & Header -->
-            <div class="text-center mb-6">
-                <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-blue-50 text-blue-600 mb-4 border border-blue-100 shadow-inner">
-                    <i data-lucide="shield-alert" class="w-8 h-8"></i>
+            <!-- Intégration du Widget hCaptcha -->
+            <div class="my-2 p-1 bg-slate-950/50 rounded-xl border border-slate-800/80">
+                <div class="h-captcha" 
+                     data-sitekey="58121974-557a-4d76-a3a4-a53e799e7dda"
+                     data-callback="onCaptchaSuccess">
                 </div>
-                <h1 class="text-2xl font-bold text-slate-900 tracking-tight">Vérification de sécurité</h1>
-                <p class="text-slate-500 text-sm mt-2 leading-relaxed">
-                    Afin d'assurer la sécurité de notre service, veuillez confirmer que vous n'êtes pas un robot.
-                </p>
             </div>
 
-            <div id="statusMessage" class="hidden mb-6 p-4 rounded-2xl text-sm font-medium flex items-center gap-3 transition-all duration-300">
-                <i id="statusIcon" class="w-5 h-5 flex-shrink-0"></i>
-                <span id="statusText"></span>
+            <!-- Message d'erreur personnalisé -->
+            <div id="errorMessage" class="hidden mt-3 text-xs text-rose-400 bg-rose-500/10 border border-rose-500/20 rounded-lg py-2 px-3 w-full">
+                Veuillez valider le test de sécurité ci-dessus.
             </div>
 
-            <form id="captchaForm" method="POST" onsubmit="handleValidation(event)" class="space-y-6">
-                
-                <!-- hCaptcha Container -->
-                <div class="flex flex-col items-center justify-center bg-slate-50/80 p-3.5 rounded-2xl border border-slate-200/80 shadow-inner">
-                    <div class="h-captcha" data-sitekey="58121974-557a-4d76-a3a4-a53e799e7dda"></div>
-                </div>
+            <!-- Bouton de validation -->
+            <button type="submit" 
+                    id="submitBtn"
+                    class="mt-6 w-full py-3.5 px-6 rounded-xl font-medium text-slate-300 bg-slate-800 border border-slate-700 hover:bg-slate-700 hover:text-white transition-all duration-200 cursor-pointer flex items-center justify-center gap-2">
+                <span>Continuer vers le site</span>
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path>
+                </svg>
+            </button>
+        </form>
 
-                <!-- Submit Button -->
-                <button type="submit" id="submitBtn" 
-                    class="w-full relative group overflow-hidden rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3.5 px-4 shadow-lg shadow-blue-500/25 hover:shadow-blue-500/35 transition-all duration-200 active:scale-[0.99] flex items-center justify-center gap-2">
-                    <span id="btnText" class="flex items-center gap-2">
-                        <span>Continuer vers le site</span>
-                        <i data-lucide="arrow-right" class="w-4 h-4 group-hover:translate-x-1 transition-transform"></i>
-                    </span>
-                    <!-- Loading Spinner -->
-                    <svg id="btnSpinner" class="hidden animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                    </svg>
-                </button>
-
-            </form>
-
-            <div class="mt-8 pt-6 border-t border-slate-200/60 text-center">
-                <p class="text-xs text-slate-400">
-                    Protégé par hCaptcha. Les <a href="#" class="underline hover:text-slate-600">conditions d'utilisation</a> et la <a href="#" class="underline hover:text-slate-600">politique de confidentialité</a> s'appliquent.
-                </p>
-            </div>
+        <!-- Footer / Protection -->
+        <div class="mt-8 pt-6 border-t border-slate-800/60 flex items-center justify-center gap-2 text-xs text-slate-500">
+            <svg class="w-3.5 h-3.5 text-slate-400" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"></path>
+            </svg>
+            <span>Connexion sécurisée SSL</span>
         </div>
     </main>
 
-    <!-- Footer -->
-    <footer class="relative z-10 py-6 text-center text-xs text-slate-400">
-        <p>&copy; 2026 AegisGuard Security Systems. Tous droits réservés.</p>
-    </footer>
-
+    <!-- Script de gestion de la redirection -->
     <script>
-        // Initialize Icons
-        lucide.createIcons();
+        const form = document.getElementById('captchaForm');
+        const errorMessage = document.getElementById('errorMessage');
+        const submitBtn = document.getElementById('submitBtn');
 
-        // Form Validation Handler
-        function handleValidation(e) {
-            e.preventDefault();
-
-            const statusMsg = document.getElementById('statusMessage');
-            const statusText = document.getElementById('statusText');
-            const statusIcon = document.getElementById('statusIcon');
-            const submitBtn = document.getElementById('submitBtn');
-            const btnText = document.getElementById('btnText');
-            const btnSpinner = document.getElementById('btnSpinner');
-
-            // Fetch hCaptcha response token
-            const hcaptchaResponse = hcaptcha.getResponse();
-
-            if (!hcaptchaResponse) {
-                // Show Warning state
-                statusMsg.className = "mb-6 p-4 rounded-2xl text-sm font-medium flex items-center gap-3 bg-amber-50 text-amber-800 border border-amber-200/80 transition-all duration-300";
-                statusText.textContent = "Veuillez cocher le test hCaptcha pour valider la vérification.";
-                statusIcon.setAttribute('data-lucide', 'alert-circle');
-                statusMsg.classList.remove('hidden');
-                lucide.createIcons();
-                return;
-            }
-
-            // Show loading animation
-            btnText.classList.add('hidden');
-            btnSpinner.classList.remove('hidden');
-            submitBtn.disabled = true;
-
-            // Simulate verification delay
+        // Fonction appelée automatiquement par hCaptcha quand le test est réussi
+        function onCaptchaSuccess(token) {
+            errorMessage.classList.add('hidden');
+            
+            // Met en valeur le bouton de validation
+            submitBtn.className = "mt-6 w-full py-3.5 px-6 rounded-xl font-medium text-white bg-emerald-600 hover:bg-emerald-500 shadow-lg shadow-emerald-600/25 transition-all duration-200 cursor-pointer flex items-center justify-center gap-2";
+            
+            // Optionnel : redirige immédiatement après 500ms sans cliquer
             setTimeout(() => {
-                btnText.classList.remove('hidden');
-                btnSpinner.classList.add('hidden');
-                submitBtn.disabled = false;
-
-                // Show Success state
-                statusMsg.className = "mb-6 p-4 rounded-2xl text-sm font-medium flex items-center gap-3 bg-emerald-50 text-emerald-800 border border-emerald-200/80 transition-all duration-300";
-                statusText.textContent = "Vérification réussie ! Redirection en cours...";
-                statusIcon.setAttribute('data-lucide', 'check-circle-2');
-                statusMsg.classList.remove('hidden');
-                lucide.createIcons();
-
-                // Reset captcha state after success demo
-                setTimeout(() => {
-                    hcaptcha.reset();
-                }, 3000);
-
-            }, 1000);
+                window.location.href = "accueil.html";
+            }, 500);
         }
+
+        // Vérification si l'utilisateur clique sur le bouton sans avoir fait le captcha
+        form.addEventListener('submit', function(e) {
+            const hcaptchaResponse = hcaptcha.getResponse();
+            if (!hcaptchaResponse) {
+                e.preventDefault(); // Empêche la redirection
+                errorMessage.classList.remove('hidden');
+            }
+        });
     </script>
+
 </body>
 </html>
