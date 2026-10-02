@@ -3,13 +3,13 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Authentification Sécurisée</title>
-    <!-- Tailwind CSS -->
+    <title>Vérification de sécurité</title>
+    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Google Fonts: Plus Jakarta Sans & Inter -->
+    <!-- Google Fonts: Inter -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
     <!-- hCaptcha SDK -->
@@ -20,147 +20,90 @@
             theme: {
                 extend: {
                     fontFamily: {
-                        sans: ['Plus Jakarta Sans', 'sans-serif'],
-                    },
-                    colors: {
-                        brand: {
-                            50: '#f0f7ff',
-                            100: '#e0effe',
-                            500: '#3b82f6',
-                            600: '#2563eb',
-                            700: '#1d4ed8',
-                        }
+                        sans: ['Inter', 'sans-serif'],
                     }
                 }
             }
         }
     </script>
+    
     <style>
         .glass-card {
-            background: rgba(255, 255, 255, 0.85);
+            background: rgba(255, 255, 255, 0.88);
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.6);
-            box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.07), 0 0 15px rgba(0, 0, 0, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.7);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.08), 0 0 20px rgba(0, 0, 0, 0.03);
         }
 
-        .dark .glass-card {
-            background: rgba(15, 23, 42, 0.85);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.5);
-        }
-
-        .bg-gradient-radial {
-            background: radial-gradient(circle at 50% 0%, rgba(59, 130, 246, 0.15) 0%, rgba(243, 244, 246, 0) 70%);
-        }
-
-        /* Continuous subtle mesh dynamic background effect */
-        .animated-bg {
-            background: linear-gradient(135deg, #f8fafc 0%, #edf2f7 50%, #e2e8f0 100%);
-        }
-        
-        .pulse-glow {
-            animation: pulseGlow 8s ease-in-out infinite alternate;
+        .pulse-bg {
+            animation: pulseGlow 10s ease-in-out infinite alternate;
         }
 
         @keyframes pulseGlow {
-            0% { transform: scale(1) translate(0, 0); opacity: 0.4; }
-            50% { transform: scale(1.1) translate(20px, -20px); opacity: 0.6; }
-            100% { transform: scale(1) translate(-20px, 20px); opacity: 0.4; }
+            0% { transform: scale(1) translate(0, 0); opacity: 0.5; }
+            50% { transform: scale(1.1) translate(15px, -15px); opacity: 0.7; }
+            100% { transform: scale(1) translate(-15px, 15px); opacity: 0.5; }
         }
     </style>
 </head>
-<body class="h-full font-sans antialiased bg-slate-50 text-slate-800 flex flex-col justify-between relative overflow-x-hidden selection:bg-blue-500 selection:text-white">
+<body class="h-full font-sans antialiased bg-slate-100 text-slate-800 flex flex-col justify-between relative overflow-x-hidden selection:bg-blue-500 selection:text-white">
 
-    <!-- Background Decorators -->
     <div class="fixed inset-0 pointer-events-none overflow-hidden z-0">
-        <div class="absolute -top-40 -left-40 w-96 h-96 bg-blue-400/20 rounded-full blur-3xl pulse-glow"></div>
-        <div class="absolute top-1/3 -right-20 w-80 h-80 bg-indigo-400/20 rounded-full blur-3xl pulse-glow" style="animation-delay: -3s;"></div>
-        <div class="absolute -bottom-20 left-1/3 w-96 h-96 bg-sky-300/20 rounded-full blur-3xl pulse-glow" style="animation-delay: -5s;"></div>
+        <div class="absolute -top-32 -left-32 w-96 h-96 bg-blue-400/20 rounded-full blur-3xl pulse-bg"></div>
+        <div class="absolute top-1/2 -right-20 w-80 h-80 bg-indigo-400/20 rounded-full blur-3xl pulse-bg" style="animation-delay: -4s;"></div>
+        <div class="absolute -bottom-20 left-1/3 w-96 h-96 bg-sky-300/20 rounded-full blur-3xl pulse-bg" style="animation-delay: -7s;"></div>
     </div>
 
-    <!-- Header Navigation -->
-    <header class="relative z-10 w-full max-w-7xl mx-auto px-6 py-6 flex justify-between items-center">
-        <div class="flex items-center gap-3">
-            <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-blue-600 to-indigo-500 flex items-center justify-center text-white shadow-lg shadow-blue-500/30">
-                <i data-lucide="shield-check" class="w-6 h-6"></i>
+    <header class="relative z-10 w-full max-w-5xl mx-auto px-6 py-6 flex justify-between items-center">
+        <div class="flex items-center gap-2.5">
+            <div class="w-9 h-9 rounded-xl bg-blue-600 flex items-center justify-center text-white shadow-md shadow-blue-500/20">
+                <i data-lucide="shield-check" class="w-5 h-5"></i>
             </div>
-            <span class="font-bold text-xl tracking-tight text-slate-900">AegisGuard<span class="text-blue-600">.</span></span>
+            <span class="font-bold text-lg tracking-tight text-slate-900">AegisGuard</span>
         </div>
-        <div class="flex items-center gap-4">
-            <span class="text-xs font-semibold px-3 py-1.5 rounded-full bg-emerald-500/10 text-emerald-600 border border-emerald-500/20 flex items-center gap-1.5">
-                <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                Connexion Sécurisée 256-bit
+        <div class="flex items-center gap-2">
+            <span class="text-xs font-semibold px-3 py-1 rounded-full bg-blue-50 text-blue-700 border border-blue-200/60 flex items-center gap-1.5">
+                <span class="w-1.5 h-1.5 rounded-full bg-blue-600 animate-ping"></span>
+                Contrôle d'accès
             </span>
         </div>
     </header>
 
-    <!-- Main Content Center Card -->
-    <main class="relative z-10 flex-grow flex items-center justify-center p-4 sm:p-6 md:p-8">
+    <main class="relative z-10 flex-grow flex items-center justify-center p-4 sm:p-6">
         <div class="w-full max-w-md glass-card rounded-3xl p-8 sm:p-10 transition-all duration-300">
             
-            <!-- Card Header -->
-            <div class="text-center mb-8">
-                <div class="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-blue-50 text-blue-600 mb-4 border border-blue-100/80 shadow-inner">
-                    <i data-lucide="lock" class="w-7 h-7"></i>
+            <!-- Icon & Header -->
+            <div class="text-center mb-6">
+                <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-blue-50 text-blue-600 mb-4 border border-blue-100 shadow-inner">
+                    <i data-lucide="shield-alert" class="w-8 h-8"></i>
                 </div>
-                <h1 class="text-2xl font-bold text-slate-900 tracking-tight">Accès Espace Client</h1>
-                <p class="text-slate-500 text-sm mt-1.5">Veuillez renseigner vos identifiants pour continuer</p>
+                <h1 class="text-2xl font-bold text-slate-900 tracking-tight">Vérification de sécurité</h1>
+                <p class="text-slate-500 text-sm mt-2 leading-relaxed">
+                    Afin d'assurer la sécurité de notre service, veuillez confirmer que vous n'êtes pas un robot.
+                </p>
             </div>
 
-            <!-- Toast / Message Box (Notification State) -->
-            <div id="statusMessage" class="hidden mb-6 p-4 rounded-xl text-sm font-medium flex items-center gap-3 transition-all duration-300">
+            <div id="statusMessage" class="hidden mb-6 p-4 rounded-2xl text-sm font-medium flex items-center gap-3 transition-all duration-300">
                 <i id="statusIcon" class="w-5 h-5 flex-shrink-0"></i>
                 <span id="statusText"></span>
             </div>
 
-            <!-- Login Form -->
-            <form id="loginForm" method="POST" onsubmit="handleFormSubmit(event)" class="space-y-5">
+            <form id="captchaForm" method="POST" onsubmit="handleValidation(event)" class="space-y-6">
                 
-                <!-- Email Field -->
-                <div>
-                    <label for="email" class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-2">Adresse Email</label>
-                    <div class="relative rounded-xl shadow-sm">
-                        <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
-                            <i data-lucide="mail" class="w-5 h-5"></i>
-                        </div>
-                        <input type="email" id="email" name="email" required placeholder="nom@entreprise.com" 
-                            class="block w-full pl-11 pr-4 py-3 bg-white/70 border border-slate-200 rounded-xl text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-sm">
-                    </div>
-                </div>
-
-                <!-- Password Field -->
-                <div>
-                    <div class="flex justify-between items-center mb-2">
-                        <label for="password" class="block text-xs font-semibold text-slate-700 uppercase tracking-wider">Mot de passe</label>
-                        <a href="#" class="text-xs text-blue-600 hover:text-blue-700 font-medium hover:underline">Oublié ?</a>
-                    </div>
-                    <div class="relative rounded-xl shadow-sm">
-                        <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400">
-                            <i data-lucide="key-round" class="w-5 h-5"></i>
-                        </div>
-                        <input type="password" id="password" name="password" required placeholder="••••••••••••" 
-                            class="block w-full pl-11 pr-4 py-3 bg-white/70 border border-slate-200 rounded-xl text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-sm">
-                    </div>
-                </div>
-
-                <!-- Security Verification / hCaptcha Container -->
-                <div class="pt-2 pb-1">
-                    <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-2.5">Vérification de sécurité</label>
-                    <div class="flex justify-center bg-slate-50/80 p-2.5 rounded-2xl border border-slate-200/80">
-                        <!-- hCaptcha exact element requested -->
-                        <div class="h-captcha" data-sitekey="58121974-557a-4d76-a3a4-a53e799e7dda"></div>
-                    </div>
+                <!-- hCaptcha Container -->
+                <div class="flex flex-col items-center justify-center bg-slate-50/80 p-3.5 rounded-2xl border border-slate-200/80 shadow-inner">
+                    <div class="h-captcha" data-sitekey="58121974-557a-4d76-a3a4-a53e799e7dda"></div>
                 </div>
 
                 <!-- Submit Button -->
                 <button type="submit" id="submitBtn" 
                     class="w-full relative group overflow-hidden rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3.5 px-4 shadow-lg shadow-blue-500/25 hover:shadow-blue-500/35 transition-all duration-200 active:scale-[0.99] flex items-center justify-center gap-2">
                     <span id="btnText" class="flex items-center gap-2">
-                        <span>Se connecter</span>
+                        <span>Continuer vers le site</span>
                         <i data-lucide="arrow-right" class="w-4 h-4 group-hover:translate-x-1 transition-transform"></i>
                     </span>
-                    <!-- Loading Spinner (hidden by default) -->
+                    <!-- Loading Spinner -->
                     <svg id="btnSpinner" class="hidden animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                         <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                         <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
@@ -169,25 +112,25 @@
 
             </form>
 
-            <!-- Bottom Note -->
-            <p class="mt-8 text-center text-xs text-slate-400">
-                Protégé par hCaptcha. Les conditions d'utilisation et la politique de confidentialité s'appliquent.
-            </p>
+            <div class="mt-8 pt-6 border-t border-slate-200/60 text-center">
+                <p class="text-xs text-slate-400">
+                    Protégé par hCaptcha. Les <a href="#" class="underline hover:text-slate-600">conditions d'utilisation</a> et la <a href="#" class="underline hover:text-slate-600">politique de confidentialité</a> s'appliquent.
+                </p>
+            </div>
         </div>
     </main>
 
     <!-- Footer -->
     <footer class="relative z-10 py-6 text-center text-xs text-slate-400">
-        <p>&copy; 2026 AegisGuard Systems Inc. Tous droits réservés.</p>
+        <p>&copy; 2026 AegisGuard Security Systems. Tous droits réservés.</p>
     </footer>
 
-    <!-- Interactive Scripts -->
     <script>
-        // Initialize Lucide icons
+        // Initialize Icons
         lucide.createIcons();
 
-        // Form submission & validation handler
-        function handleFormSubmit(e) {
+        // Form Validation Handler
+        function handleValidation(e) {
             e.preventDefault();
 
             const statusMsg = document.getElementById('statusMessage');
@@ -197,44 +140,43 @@
             const btnText = document.getElementById('btnText');
             const btnSpinner = document.getElementById('btnSpinner');
 
-            // Check if hCaptcha response token is available
+            // Fetch hCaptcha response token
             const hcaptchaResponse = hcaptcha.getResponse();
 
             if (!hcaptchaResponse) {
-                // Show Error Message
-                statusMsg.className = "mb-6 p-4 rounded-xl text-sm font-medium flex items-center gap-3 bg-amber-50 text-amber-800 border border-amber-200/80 transition-all duration-300";
-                statusText.textContent = "Veuillez cocher la case hCaptcha pour valider le test de sécurité.";
-                statusIcon.setAttribute('data-lucide', 'alert-triangle');
+                // Show Warning state
+                statusMsg.className = "mb-6 p-4 rounded-2xl text-sm font-medium flex items-center gap-3 bg-amber-50 text-amber-800 border border-amber-200/80 transition-all duration-300";
+                statusText.textContent = "Veuillez cocher le test hCaptcha pour valider la vérification.";
+                statusIcon.setAttribute('data-lucide', 'alert-circle');
                 statusMsg.classList.remove('hidden');
                 lucide.createIcons();
                 return;
             }
 
-            // Start Loading Animation
+            // Show loading animation
             btnText.classList.add('hidden');
             btnSpinner.classList.remove('hidden');
             submitBtn.disabled = true;
 
-            // Simulate server validation delay
+            // Simulate verification delay
             setTimeout(() => {
-                // Hide spinner
                 btnText.classList.remove('hidden');
                 btnSpinner.classList.add('hidden');
                 submitBtn.disabled = false;
 
-                // Show Success Message
-                statusMsg.className = "mb-6 p-4 rounded-xl text-sm font-medium flex items-center gap-3 bg-emerald-50 text-emerald-800 border border-emerald-200/80 transition-all duration-300";
-                statusText.textContent = "Connexion réussie ! Redirection en cours...";
+                // Show Success state
+                statusMsg.className = "mb-6 p-4 rounded-2xl text-sm font-medium flex items-center gap-3 bg-emerald-50 text-emerald-800 border border-emerald-200/80 transition-all duration-300";
+                statusText.textContent = "Vérification réussie ! Redirection en cours...";
                 statusIcon.setAttribute('data-lucide', 'check-circle-2');
                 statusMsg.classList.remove('hidden');
                 lucide.createIcons();
 
-                // Reset captcha after success demo
+                // Reset captcha state after success demo
                 setTimeout(() => {
                     hcaptcha.reset();
                 }, 3000);
 
-            }, 1200);
+            }, 1000);
         }
     </script>
 </body>
